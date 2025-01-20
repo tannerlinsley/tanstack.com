@@ -187,35 +187,42 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 
       // Configuration for gradient blobs
       const blobs = [
-        // Do Red, Orange, Yellow, Green, Blue, Turquoise
         {
           direction: [Math.random() * 1, Math.random() * 1],
-          color: { h: 10, s: 100, l: 50 },
-        }, // Red
+          color: { h: 184, s: 100, l: 50 }, // turquoise from logo sky
+        },
         {
           direction: [Math.random() * 1, Math.random() * 1],
-          color: { h: 40, s: 100, l: 50 },
-        }, // Yellow
+          color: { h: 42, s: 100, l: 50 }, // orange from logo sun
+        },
         {
           direction: [Math.random() * 1, Math.random() * 1],
-          color: { h: 150, s: 100, l: 50 },
-        }, // Green
+          color: { h: 341, s: 94, l: 50 }, // red from logo sunchair
+        },
         {
           direction: [Math.random() * 1, Math.random() * 1],
-          color: { h: 200, s: 100, l: 50 },
-        }, // Blue
+          color: { h: 184, s: 100, l: 50 }, // turquoise from logo sky (second instance)
+        },
+        {
+          direction: [Math.random() * 1, Math.random() * 1],
+          color: { h: 42, s: 100, l: 50 }, // orange from logo sun (second instance)
+        },
+        {
+          direction: [Math.random() * 1, Math.random() * 1],
+          color: { h: 341, s: 94, l: 50 }, // red from logo sunchair (second instance)
+        },
       ].map((blob, i) => ({
         ...blob,
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        r: Math.random() * 500 + 700,
+        r: Math.max(Math.random() * canvas.height, 200), // at least 200
         colorH: blob.color.h,
         colorS: blob.color.s,
         colorL: blob.color.l,
         colorA: 1,
       }))
 
-      const movementSpeed = 1
+      const movementSpeed = 0.5
 
       // Animate the blobs
       function animate() {
@@ -233,7 +240,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         })
 
         blobs.forEach((blob, i) => {
-          // Create a radial gradient for each blob[...blobs].forEach((blob, i) => {
           blob.x += blob.direction[0] * movementSpeed
           blob.y += blob.direction[1] * movementSpeed
 
@@ -274,11 +280,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
-  const isHomePage = useRouterState({
-    select: (s) => s.location.pathname === '/',
-  })
+  // const isHomePage = useRouterState({
+  //   select: (s) => s.location.pathname === '/',
+  // })
 
-  const mounted = useMounted()
+  // const mounted = useMounted()
 
   return (
     <html lang="en" className={themeClass}>
@@ -296,15 +302,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <div
+          id="animated-background-canvas-container"
           className={twMerge(
             'fixed inset-0 z-0 opacity-20 pointer-events-none',
             'transition-opacity duration-[2s] ease-linear',
-            `[&+*]:relative`,
-            mounted
-              ? isHomePage
-                ? 'opacity-10 dark:opacity-20'
-                : 'opacity-10 dark:opacity-20'
-              : 'opacity-0'
+            `[&+*]:relative`
           )}
         >
           <canvas ref={canvasRef} />
